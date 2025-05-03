@@ -24,6 +24,8 @@ FROM gcr.io/distroless/base
 WORKDIR /
 
 COPY --from=build /server server
+COPY --from=build /db.sqlite ./db.sqlite 
+
 
 ENV NODE_ENV=production
 
