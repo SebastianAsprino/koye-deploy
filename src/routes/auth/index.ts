@@ -5,5 +5,5 @@ import { Logout } from "./logout";
 
 export const Auth = new Elysia()
 	.use(Login)
-	// .use(IsLogin)
-	// .use(Logout);
+	.use(IsLogin)
+	.use(Logout);

@@ -8,7 +8,7 @@ export const Logout = new Elysia()
 	{
 			// Elimina la cookie 'auth'
 			cookie.auth.remove()
-	
+
 			return {
 				success: true
 			}
