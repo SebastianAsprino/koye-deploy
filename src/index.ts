@@ -4,6 +4,7 @@ import { Routes } from "./routes";
 import { cors } from '@elysiajs/cors'
 
 import { swagger } from '@elysiajs/swagger'
+import { usuario } from "./services";
 
 const app = new Elysia()
 	.use(cors())
@@ -19,3 +20,10 @@ const app = new Elysia()
 console.log(
 	`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
 );
+
+
+
+
+// login usuario
+// que el usuario pueda ceear cuentas
+// que el usuario pueda registrar transacciones
