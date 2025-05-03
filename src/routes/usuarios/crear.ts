@@ -8,16 +8,9 @@ import { eq } from 'drizzle-orm';
 export const Crear = new Elysia()
 	.use(plugins)
 
-	.post('/nuevo', async ({jwt, error, cookie: { auth }, body}) =>
+	.post('/nuevo', async ({error, body}) =>
 	{
-		const profile = await jwt.verify(auth.value)
-
-		if (!profile || profile.rol !== 'admin')
-		{
-			return error(403, 'Forbidden: Solo los administradores pueden crear usuarios')
-		}
-
-		if (!body.usu || !body.clave)
+		if (!body.nombre || !body.clave)
 		{
 			throw error(400)
 		}
@@ -28,8 +21,7 @@ export const Crear = new Elysia()
 		});
 
 		const data = {
-			usuario: body.usu.trim(),
-			rol: body.rol,
+			nombre: body.nombre.trim(),
 			clave: bcryptHash
 		}
 
@@ -48,8 +40,7 @@ export const Crear = new Elysia()
 	},
 	{
 		body: t.Object({
-			usu: t.String(),
-			rol: t.Union([t.Literal('admin'), t.Literal('empleado')]),
+			nombre: t.String(),
 			clave: t.String()
 		})
 	})

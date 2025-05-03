@@ -9,7 +9,7 @@ export const Login = new Elysia()
 	{
 		const user = await db.select()
 			.from(usuario)
-			.where(eq(usuario.usuario, body.usu))
+			.where(eq(usuario.nombre, body.nombre))
 			.limit(1)
 			.execute()
 			.then(rows => rows[0]);
@@ -26,8 +26,7 @@ export const Login = new Elysia()
 		}
 
 		const token = await jwt.sign({
-			usuario: user.usuario,
-			rol: user.rol
+			usuario: user.id
 		});
 
 		auth.set({
@@ -37,12 +36,11 @@ export const Login = new Elysia()
 		});
 
 		return {
-			success: true,
-			rol: user.rol
+			success: true
 		};
 	}, {
 		body: t.Object({
-			usu: t.String(),
+			nombre: t.String(),
 			clave: t.String()
 		})
 	});
