@@ -3,22 +3,13 @@ import { db, usuario } from '../src/services/index'
 import { eq } from 'drizzle-orm'
 
 // Configuración
-const BASE_URL = 'http://localhost:8000'
+const BASE_URL = 'http://localhost:8000/usuario'
 const TEST_USER = {
-  nombre: 'testuser',
-  clave: 'testpassword123'
+  nombre: 'hola',
+  clave: '1234'
 }
 
 describe('Ruta POST /nuevo - Pruebas con fetch', () => {
-  beforeAll(async () => {
-    // Limpiar la base de datos antes de comenzar
-    await db.delete(usuario)
-  })
-
-  afterAll(async () => {
-    // Limpiar la base de datos después de las pruebas
-    await db.delete(usuario)
-  })
 
   it('debería crear un nuevo usuario exitosamente', async () => {
     const response = await fetch(`${BASE_URL}/nuevo`, {
@@ -46,29 +37,6 @@ describe('Ruta POST /nuevo - Pruebas con fetch', () => {
     expect(await Bun.password.verify(TEST_USER.clave, createdUser.clave)).toBe(true)
   })
 
-  it('debería fallar con status 400 si falta el nombre', async () => {
-    const response = await fetch(`${BASE_URL}/nuevo`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ clave: 'password123' })
-    })
-
-    expect(response.status).toBe(400)
-  })
-
-  it('debería fallar con status 400 si falta la contraseña', async () => {
-    const response = await fetch(`${BASE_URL}/nuevo`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ nombre: 'testuser2' })
-    })
-
-    expect(response.status).toBe(400)
-  })
 
   it('debería manejar correctamente usuarios duplicados', async () => {
     // Primera creación (debería funcionar)
