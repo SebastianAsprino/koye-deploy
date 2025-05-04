@@ -1,7 +1,9 @@
 import { db } from "./database/db";
-import { usuario } from "./database/schema";
+import { usuario, cuenta, transaccion } from "./database/schema";
 
 export{
 	db,
-	usuario
+	usuario,
+	cuenta,
+	transaccion
 }

@@ -2,9 +2,8 @@ import { Elysia } from "elysia";
 import { Routes } from "./routes";
 // import { staticPlugin } from '@elysiajs/static'
 import { cors } from '@elysiajs/cors'
-
 import { swagger } from '@elysiajs/swagger'
-import { usuario } from "./services";
+
 
 const app = new Elysia()
 	.use(cors())
@@ -15,6 +14,7 @@ const app = new Elysia()
 	// 	prefix: '/'
 	// }))
 	.use(Routes)
+	.get('/',()=> ":D")
 	.listen(8000);
 
 console.log(
@@ -24,6 +24,5 @@ console.log(
 
 
 
-// login usuario
 // que el usuario pueda ceear cuentas
 // que el usuario pueda registrar transacciones
