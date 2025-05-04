@@ -37,6 +37,7 @@ export const Login = new Elysia()
 
 		return {
 			success: true,
+			id:user.id,
 			token
 		};
 	}, {
