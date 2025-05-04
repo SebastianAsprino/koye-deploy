@@ -1,7 +1,6 @@
 import { Elysia, t} from 'elysia'
 import { db, cuenta } from '../../services';
 import { plugins } from '../../plugins';
-import { eq } from 'drizzle-orm';
 
 
 export const Crear = new Elysia()
