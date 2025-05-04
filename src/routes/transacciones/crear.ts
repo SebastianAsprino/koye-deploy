@@ -7,7 +7,7 @@ import { eq } from 'drizzle-orm';
 export const Crear = new Elysia()
 	.use(plugins)
 
-	.post("/transacciones", async ({ body, set }) => {
+	.post("/crear", async ({ body, set }) => {
 		const {
 			tipo,
 			monto,
@@ -38,8 +38,7 @@ export const Crear = new Elysia()
 				return { error: "Cuenta destino no encontrada" };
 			}
 		}
-	
-		// Actualizar saldos según el tipo de transacción
+			// Actualizar saldos según el tipo de transacción
 		if (tipo === "ingreso") {
 			await db.update(cuenta).set({
 				saldo: cuentaOrigen.saldo + monto
@@ -47,11 +46,7 @@ export const Crear = new Elysia()
 		}
 	
 		if (tipo === "gasto") {
-			if (cuentaOrigen.saldo < monto) {
-				set.status = 400;
-				return { error: "Saldo insuficiente para gasto" };
-			}
-	
+		
 			await db.update(cuenta).set({
 				saldo: cuentaOrigen.saldo - monto
 			}).where(eq(cuenta.id, cuentaId));
@@ -72,7 +67,6 @@ export const Crear = new Elysia()
 			}).where(eq(cuenta.id, cuentaDestinoId!));
 		}
 	
-		// Crear la transacción
 		const result = await db.insert(transaccion).values({
 			tipo,
 			monto,
@@ -82,7 +76,9 @@ export const Crear = new Elysia()
 			fecha: fecha ?? new Date().toISOString()
 		}).returning();
 	
-		return result;
+		return {
+			success: true,
+			result};
 	}, {
 		body: t.Object({
 			tipo: t.Union([
