@@ -62,3 +62,44 @@ const transacciones = await db
 		}
 	]
 })
+
+.get("/:userid", async ({ jwt, error, headers, params, set }) => {
+	const authHeader = headers["authorization"];
+	const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+	const profile = token && await jwt.verify(token);
+
+	if (!profile) {
+		set.status = 401;
+		return error('Unauthorized', 'Token inválido o no proporcionado');
+	}
+
+	try {
+		const cuentasUsuario = await db
+			.select({
+				id: cuenta.id,
+				nombre: cuenta.nombre
+			})
+			.from(cuenta)
+			.where(eq(cuenta.usuarioId, Number(params.userid)));
+
+		return {
+			success: true,
+			data: cuentasUsuario
+		};
+	} catch (e) {
+		set.status = 500;
+		return {
+			success: false,
+			message: 'Error al obtener las cuentas del usuario'
+		};
+	}
+}, {
+	params: t.Object({
+		userid: t.String(),
+	}),
+	security: [
+		{
+			bearerAuth: []
+		}
+	]
+});

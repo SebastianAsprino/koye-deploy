@@ -3,6 +3,4 @@ import { Crear } from "./crear";
 
 
 export const Transacciones = new Elysia({ prefix: '/transacciones' })
-	.use(Crear)
-	// .use(GetTodos)
-	// .use(Eliminar);
+	.use(Crear);

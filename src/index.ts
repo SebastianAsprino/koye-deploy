@@ -4,7 +4,6 @@ import { Routes } from "./routes";
 import { cors } from '@elysiajs/cors'
 import { swagger } from '@elysiajs/swagger'
 
-
 const app = new Elysia()
 	.use(cors())
 	.use(swagger({
