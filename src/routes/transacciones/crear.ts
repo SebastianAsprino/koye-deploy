@@ -6,98 +6,6 @@ import { eq } from 'drizzle-orm';
 
 export const Crear = new Elysia()
 	.use(plugins)
-	.post("/cuentas", async ({jwt,  error, cookie: { auth }, body, set }) => {
-		const profile = await jwt.verify(auth.value)
-		if (!profile) {
-			set.status = 401;
-			return error('Unauthorized', 'Token inválido o no proporcionado');
-		}
-		try{
-			const result = await db.insert(cuenta).values(body).returning();
-			return {
-				success: true,
-				data: result
-			};
-		} catch (error) {
-			set.status = 418;
-			return {
-				success: false,
-				message: 'Error al crear la cuenta'
-			}
-		}
-	}, {
-		body: t.Object({
-			nombre: t.String(),
-			saldo: t.Number(),
-			usuarioId: t.Number(),
-		}),
-	})
-
-
-	.put("/cuentas/:id", async ({ jwt, error, cookie: { auth }, body, params, set }) => {
-		const profile = await jwt.verify(auth.value);
-		if (!profile) {
-			set.status = 401;
-			return error('Unauthorized', 'Token inválido o no proporcionado');
-		}
-		try {
-			const result = await db.update(cuenta)
-				.set(body)
-				.where(eq(cuenta.id, Number(params.id)))
-				.returning();
-			
-			return {
-				success: true,
-				data: result
-			};
-		} catch (e) {
-			set.status = 418;
-			return {
-				success: false,
-				message: 'Error al actualizar la cuenta'
-			};
-		}
-	}, {
-		params: t.Object({
-			id: t.String(),
-		}),
-		body: t.Object({
-			nombre: t.String(),
-			saldo: t.Number(),
-			usuarioId: t.Number(),
-		}),
-	})
-
-	
-	.delete("/cuentas/:id", async ({ jwt, error, cookie: { auth }, params, set }) => {
-		const profile = await jwt.verify(auth.value);
-		if (!profile) {
-			set.status = 401;
-			return error('Unauthorized', 'Token inválido o no proporcionado');
-		}
-		try {
-			const result = await db.delete(cuenta)
-				.where(eq(cuenta.id, Number(params.id)))
-				.returning();
-	
-			return {
-				success: true,
-				data: result
-			};
-		} catch (e) {
-			set.status = 418;
-			return {
-				success: false,
-				message: 'Error al eliminar la cuenta'
-			};
-		}
-	}, {
-		params: t.Object({
-			id: t.String(),
-		}),
-	})
-	
-
 
 	.post("/transacciones", async ({ body, set }) => {
 		const {
@@ -194,4 +102,3 @@ export const Crear = new Elysia()
 			}
 	]
 	});
-	
