@@ -1,5 +1,5 @@
 import { Elysia, t} from 'elysia'
-import { db, cuenta, transaccion, generarTipsFinancieros } from '../../services';
+import { db, cuenta, transaccion, generarTipsFinancieros, generarTipsBasadosEnNoticias } from '../../services';
 import { plugins } from '../../plugins';
 
 
@@ -34,6 +34,37 @@ export const Oddities = new Elysia()
 	params: t.Object({
 		userid: t.String(),
 	}),
+	security: [
+		{
+			bearerAuth: []
+		}
+	]
+})
+.get("/pits", async ({ jwt, error, headers, set }) => {
+	const authHeader = headers["authorization"];
+	const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+	const profile = token && await jwt.verify(token);
+
+	if (!profile) {
+		set.status = 401;
+		return error('Unauthorized', 'Token inválido o no proporcionado');
+	}
+
+	try {
+		const tips = await generarTipsBasadosEnNoticias();
+
+		return {
+			success: true,
+				data: tips
+		}
+	} catch (e) {
+		set.status = 418;
+		return {
+			success: false,
+			message: 'Error al obtener la cuenta'
+		};
+	}
+}, {
 	security: [
 		{
 			bearerAuth: []

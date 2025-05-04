@@ -1,6 +1,7 @@
 import { db } from "./database/db";
 import { usuario, cuenta, transaccion } from "./database/schema";
 import { generarTipsFinancieros } from "./IA/Oddities";
+import {generarTipsBasadosEnNoticias} from "./IA/tips"
 
 
 export{
@@ -8,5 +9,6 @@ export{
 	usuario,
 	cuenta,
 	transaccion,
-	generarTipsFinancieros
+	generarTipsFinancieros,
+	generarTipsBasadosEnNoticias
 }
