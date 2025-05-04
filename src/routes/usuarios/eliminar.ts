@@ -5,8 +5,10 @@ import { eq } from 'drizzle-orm';
 
 export const Eliminar = new Elysia()
 	.use(plugins)
-	.delete('/eliminar/:nombre', async ({jwt, error, cookie: { auth }, params}) => {
-			const profile = await jwt.verify(auth.value)
+	.delete('/eliminar/:nombre', async ({jwt,  error, headers, params }) => {
+		const authHeader = headers["authorization"];
+		const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+		const profile = token && await jwt.verify(token);
 	
 			// Verificar autenticación
 			if (!profile) {
@@ -39,7 +41,12 @@ export const Eliminar = new Elysia()
 			}
 	},
 	{
-			params: t.Object({
-					nombre: t.String()
-			})
+		params: t.Object({
+			nombre: t.String()
+		}),
+		security: [
+			{
+					bearerAuth: []
+			}
+	]
 	})

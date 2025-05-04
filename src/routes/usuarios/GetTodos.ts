@@ -4,8 +4,10 @@ import { plugins } from '../../plugins';
 
 export const GetTodos = new Elysia()
 	.use(plugins)
-	.get('/todos', async ({jwt, error, cookie: { auth }}) => {
-		const profile = await jwt.verify(auth.value)
+	.get('/todos', async ({jwt,  error, headers }) => {
+		const authHeader = headers["authorization"];
+		const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+		const profile = token && await jwt.verify(token);
 
 		try {
 				const usuarios = await db.select().from(usuario)
@@ -19,4 +21,11 @@ export const GetTodos = new Elysia()
 						message: 'Error al obtener los empleados'
 				}
 		}
-})
+},{
+	security: [
+		{
+				bearerAuth: []
+		}
+]
+}
+)

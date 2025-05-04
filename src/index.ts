@@ -7,7 +7,19 @@ import { swagger } from '@elysiajs/swagger'
 
 const app = new Elysia()
 	.use(cors())
-	.use(swagger())
+	.use(swagger({
+		documentation: {
+			components: {
+				securitySchemes: {
+					bearerAuth: {
+						type: 'http',
+						scheme: 'bearer',
+						bearerFormat: 'JWT'
+					}
+				}
+			}
+		}
+	}))
 	// .use(staticPlugin({
 	// 	assets: 'build',
 	// 	indexHTML: true,
